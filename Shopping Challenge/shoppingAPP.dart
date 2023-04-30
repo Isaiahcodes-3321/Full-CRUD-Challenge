@@ -20,24 +20,30 @@ class Structure {
   order() {
     print(
         'Welcom new user your current ballance is low please \n Press 1 to add ');
-    int opt = int.parse(stdin.readLineSync()!);
-    if (opt == 1) {
-      print('Add balance now to proceed');
-      inputBallance = int.parse(stdin.readLineSync()!);
-      print('Current ballance $inputBallance% \n 1. To make oders');
-      int opt1 = int.parse(stdin.readLineSync()!);
-      switch (opt1) {
-        case 1:
-          print('');
-          list_Oder();
-          break;
-        default:
-          print('Wrong input');
-          inputBallance = 0;
-          order();
+    try {
+      int opt = int.parse(stdin.readLineSync()!);
+      if (opt == 1) {
+        print('Add balance now to proceed');
+        inputBallance = int.parse(stdin.readLineSync()!);
+        print('Current ballance $inputBallance% \n 1. To make oders');
+        int opt1 = int.parse(stdin.readLineSync()!);
+        switch (opt1) {
+          case 1:
+            print('');
+            list_Oder();
+            break;
+          default:
+            print('Wrong input');
+            inputBallance = 0;
+            order();
+        }
+      } else {
+        print('Wrong input');
+        order();
       }
-    } else {
-      print('Wrong input');
+    } catch (e) {
+      print(' Numbers required please\n\n');
+      inputBallance = 0;
       order();
     }
   }
@@ -76,35 +82,46 @@ class Structure {
       print('$a. ' + order_list[a] + '\n');
     }
 
-    int optList = int.parse(stdin.readLineSync()!);
-    if (optList > 10) {
-      print('Wrong input');
-      list_Oder();
-    }
-    // add items to an empty array
-    list_items.add(order_list[optList]);
-    // add price of items to an empty array
-    list_items_Sumprice.add(order_list_price[optList]);
-    print(order_list[optList] + ' have been added to cart\n');
-
     while (true) {
-      print('1. To make more oders\n2. To see your oders\n3. To make payment');
-      int show_chat_list = int.parse(stdin.readLineSync()!);
-      switch (show_chat_list) {
-        case 1:
-          print('');
-          list_Oder();
-          break;
-        case 2:
-          print('');
-          showMy_cart();
-          break;
-        case 3:
-          print('');
-          payment();
-          break;
-        default:
+      try {
+        int optList = int.parse(stdin.readLineSync()!);
+        if (optList > 10) {
           print('Wrong input');
+          list_Oder();
+        }
+        // add items to an empty array
+        list_items.add(order_list[optList]);
+        // add price of items to an empty array
+        list_items_Sumprice.add(order_list_price[optList]);
+        print(order_list[optList] + ' have been added to cart\n');
+
+        while (true) {
+          print(
+              '1. To make more oders\n2. To see your oders\n3. To make payment');
+          try {
+            int show_chat_list = int.parse(stdin.readLineSync()!);
+            switch (show_chat_list) {
+              case 1:
+                print('');
+                list_Oder();
+                break;
+              case 2:
+                print('');
+                showMy_cart();
+                break;
+              case 3:
+                print('');
+                payment();
+                break;
+              default:
+                print('Wrong input');
+            }
+          } catch (e) {
+            print(' Numbers required please\n\n');
+          }
+        }
+      } catch (e) {
+        print(' Numbers required please\n');
       }
     }
   }
@@ -117,21 +134,26 @@ class Structure {
     }
 
     print('1. To add more items\n2. To delete items\n3. To make payment');
-
-    int opt2 = int.parse(stdin.readLineSync()!);
-    switch (opt2) {
-      case 1:
-        list_Oder();
-        break;
-      case 2:
-        delete_Items();
-        break;
-      case 3:
-        payment();
-        break;
-      default:
-        print('Wrong input');
-        showMy_cart();
+    while (true) {
+      try {
+        int opt2 = int.parse(stdin.readLineSync()!);
+        switch (opt2) {
+          case 1:
+            list_Oder();
+            break;
+          case 2:
+            delete_Items();
+            break;
+          case 3:
+            payment();
+            break;
+          default:
+            print('Wrong input');
+            showMy_cart();
+        }
+      } catch (e) {
+        print(' Numbers required please\n');
+      }
     }
   }
 
@@ -141,56 +163,66 @@ class Structure {
     for (total_shopping_price in list_items_Sumprice) {
       total_sum += total_shopping_price;
     }
-    print(
-        'Your total Sum its  $total_sum%\n \n1. To delete more items\n2. Continue payment');
-    int opt3 = int.parse(stdin.readLineSync()!);
 
-    if (opt3 == 1) {
-      total_sum = 0;
-      delete_Items();
-    } else if (opt3 == 2) {
-      if (list_items_Sumprice.length <= 0) {
-        print(
-            '\n  No items found to pay bill \n Please add some items to cart');
-        list_Oder();
-      }
-      if (inputBallance >= total_sum) {
-        inputBallance = inputBallance - total_sum;
+    while (true) {
+      print(
+          'Your total Sum its  $total_sum%\n \n1. To delete more items\n2. Continue payment');
+      try {
+        int opt3 = int.parse(stdin.readLineSync()!);
 
-        while (true) {
-          print(
-              'Payment successful \n  Current balance  $inputBallance\n \n1. To purchase more items \n2. Back\n3. Exit');
-          int opt4 = int.parse(stdin.readLineSync()!);
-          switch (opt4) {
-            case 1:
-              list_items_Sumprice.clear();
-              list_items.clear();
-              total_sum = 0;
-              list_Oder();
-              break;
-            case 2:
-              list_items_Sumprice.clear();
-              list_items.clear();
-              total_sum = 0;
-              payment();
-              break;
-            case 3:
-              exit(0);
-            default:
-              print('  Wrong input ');
+        if (opt3 == 1) {
+          total_sum = 0;
+          delete_Items();
+        } else if (opt3 == 2) {
+          if (list_items_Sumprice.length <= 0) {
+            print(
+                '\n  No items found to pay bill \n Please add some items to cart');
+            list_Oder();
           }
-        }
-      } else {
-        print(
-            ' Payment decliend not enough money on your wallet\n please try deleting some items to procceed\n Money in your wallet $inputBallance%\n\n');
+          if (inputBallance >= total_sum) {
+            inputBallance = inputBallance - total_sum;
 
-        total_sum = 0;
-        payment();
+            while (true) {
+              print(
+                  'Payment successful \n  Current balance  $inputBallance\n \n1. To purchase more items \n2. Back\n3. Exit');
+              try {
+                int opt4 = int.parse(stdin.readLineSync()!);
+                switch (opt4) {
+                  case 1:
+                    list_items_Sumprice.clear();
+                    list_items.clear();
+                    total_sum = 0;
+                    list_Oder();
+                    break;
+                  case 2:
+                    list_items_Sumprice.clear();
+                    list_items.clear();
+                    total_sum = 0;
+                    payment();
+                    break;
+                  case 3:
+                    exit(0);
+                  default:
+                    print('  Wrong input ');
+                }
+              } catch (e) {
+                print(' Numbers required please\n');
+              }
+            }
+          } else {
+            print(
+                ' Payment decliend not enough money on your wallet\n please try deleting some items to procceed\n Money in your wallet $inputBallance%\n\n');
+            total_sum = 0;
+            payment();
+          }
+        } else {
+          print('Wrong input');
+          total_sum = 0;
+          payment();
+        }
+      } catch (e) {
+        print(' Numbers required please\n');
       }
-    } else {
-      print('Wrong input');
-      total_sum = 0;
-      payment();
     }
   }
 
@@ -201,19 +233,25 @@ class Structure {
       list_items_Sumprice.clear();
       list_Oder();
     }
-    print('\n   Which item do you which to delete?   ');
-    for (int b = 0; b < list_items.length; b++) {
-      print('$b. ' + list_items[b] + '\n');
-    }
-    int opt3 = int.parse(stdin.readLineSync()!);
-    if (opt3 > list_items.length) {
-      print('Item Number  $opt3  Dose not exit try again');
-      delete_Items();
-    }
-    print(list_items[opt3] + ' have been deleted succesfully');
-    list_items.remove(list_items[opt3]);
-    list_items_Sumprice.remove(list_items_Sumprice[opt3]);
+    while (true) {
+      try {
+        print('\n   Which item do you which to delete?   ');
+        for (int b = 0; b < list_items.length; b++) {
+          print('$b. ' + list_items[b] + '\n');
+        }
+        int opt3 = int.parse(stdin.readLineSync()!);
+        if (opt3 > list_items.length) {
+          print('Item Number  $opt3  Dose not exit try again');
+          delete_Items();
+        }
+        print(list_items[opt3] + ' have been deleted succesfully');
+        list_items.remove(list_items[opt3]);
+        list_items_Sumprice.remove(list_items_Sumprice[opt3]);
 
-    showMy_cart();
+        showMy_cart();
+      } catch (e) {
+        print(' Numbers required please\n');
+      }
+    }
   }
 }
