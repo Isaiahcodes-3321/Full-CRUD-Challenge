@@ -26,13 +26,15 @@ class Structure {
       inputBallance = int.parse(stdin.readLineSync()!);
       print('Current ballance $inputBallance% \n 1. To make oders');
       int opt1 = int.parse(stdin.readLineSync()!);
-      if (opt1 == 1) {
-        print('');
-        list_Oder();
-      } else {
-        print('Wrong input');
-        inputBallance = 0;
-        order();
+      switch (opt1) {
+        case 1:
+          print('');
+          list_Oder();
+          break;
+        default:
+          print('Wrong input');
+          inputBallance = 0;
+          order();
       }
     } else {
       print('Wrong input');
@@ -40,6 +42,7 @@ class Structure {
     }
   }
 
+// my order list items
   list_Oder() {
     List<String> order_list = [
       'Cloths 356%',
@@ -54,6 +57,7 @@ class Structure {
       'Flash 129%',
       'Fan 333%'
     ];
+    // my order list price
     order_list_price = [
       356,
       1890,
@@ -86,20 +90,26 @@ class Structure {
     while (true) {
       print('1. To make more oders\n2. To see your oders\n3. To make payment');
       int show_chat_list = int.parse(stdin.readLineSync()!);
-      if (show_chat_list == 2) {
-        print('');
-        showMy_cart();
-      } else if (show_chat_list == 1) {
-        print('');
-        list_Oder();
-      } else if (show_chat_list == 3) {
-        print('');
-        payment();
+      switch (show_chat_list) {
+        case 1:
+          print('');
+          list_Oder();
+          break;
+        case 2:
+          print('');
+          showMy_cart();
+          break;
+        case 3:
+          print('');
+          payment();
+          break;
+        default:
+          print('Wrong input');
       }
-      print('Wrong input');
     }
   }
 
+// show cart items that user ordered
   showMy_cart() {
     print('\n   Your orders   ');
     for (int b = 0; b < list_items.length; b++) {
@@ -109,24 +119,28 @@ class Structure {
     print('1. To add more items\n2. To delete items\n3. To make payment');
 
     int opt2 = int.parse(stdin.readLineSync()!);
-    if (opt2 == 1) {
-      list_Oder();
-    } else if (opt2 == 2) {
-      delete_Items();
-    } else if (opt2 == 3) {
-      payment();
-    } else {
-      print('Wrong input');
-      showMy_cart();
+    switch (opt2) {
+      case 1:
+        list_Oder();
+        break;
+      case 2:
+        delete_Items();
+        break;
+      case 3:
+        payment();
+        break;
+      default:
+        print('Wrong input');
+        showMy_cart();
     }
   }
 
+  //  calculate sum of all items user ordered
   payment() {
     int total_shopping_price = 0;
     for (total_shopping_price in list_items_Sumprice) {
       total_sum += total_shopping_price;
     }
-
     print(
         'Your total Sum its  $total_sum%\n \n1. To delete more items\n2. Continue payment');
     int opt3 = int.parse(stdin.readLineSync()!);
@@ -135,20 +149,36 @@ class Structure {
       total_sum = 0;
       delete_Items();
     } else if (opt3 == 2) {
+      if (list_items_Sumprice.length <= 0) {
+        print(
+            '\n  No items found to pay bill \n Please add some items to cart');
+        list_Oder();
+      }
       if (inputBallance >= total_sum) {
         inputBallance = inputBallance - total_sum;
-        print(
-            'Payment successful \n  Current balance  $inputBallance\n \n1. To purchase more items \n2. Back\n3. Exit');
-        int opt4 = int.parse(stdin.readLineSync()!);
-        if (opt4 == 1) {
-          list_items_Sumprice.clear();
-          list_items.clear();
-          total_sum = 0;
-          list_Oder();
-        } else if (opt4 == 2) {
-          payment();
-        } else if (opt4 == 3) {
-          exit(0);
+
+        while (true) {
+          print(
+              'Payment successful \n  Current balance  $inputBallance\n \n1. To purchase more items \n2. Back\n3. Exit');
+          int opt4 = int.parse(stdin.readLineSync()!);
+          switch (opt4) {
+            case 1:
+              list_items_Sumprice.clear();
+              list_items.clear();
+              total_sum = 0;
+              list_Oder();
+              break;
+            case 2:
+              list_items_Sumprice.clear();
+              list_items.clear();
+              total_sum = 0;
+              payment();
+              break;
+            case 3:
+              exit(0);
+            default:
+              print('  Wrong input ');
+          }
         }
       } else {
         print(
@@ -164,6 +194,7 @@ class Structure {
     }
   }
 
+// user can delete items he dont need
   delete_Items() {
     if (list_items.length < 1) {
       print(' Items have not been added \n Add Items from Items list');
